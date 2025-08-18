@@ -10,7 +10,23 @@ The goal is to build a reliable, scalable pipeline for marketing analytics teams
 ## Features
 - **Data Ingestion**  
   - Batch ingestion of CSV, JSON, and log files from raw data sources.  
-  - Metadata tracking for ingestion time, source, and validation.  
+  - Metadata tracking for ingestion time, source, and validation.
+ 
+---
+
+- **Scalability**  
+  - Local development with PostgresQL.  
+    
+---
+## Architecture
+---
+
+## Tech Stack
+- **Python** – data ingestion, validation, transformation  
+- **PostgreSQL** – lightweight local testing  
+- **GitHub Actions** – CI/CD  
+
+---
 
 
 
