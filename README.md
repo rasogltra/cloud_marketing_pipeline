@@ -14,8 +14,7 @@ The goal is to build a reliable, scalable pipeline for marketing analytics teams
  
 - **Data Transformation**
   - Cleansing and standardization of campaign and ad platform data.
- 
----
+  - Schema alignment to create a unified marketing performance dataset. 
 
 - **Scalability**  
   - Local development with PostgresQL.  
@@ -23,6 +22,7 @@ The goal is to build a reliable, scalable pipeline for marketing analytics teams
 ---
 ## Architecture
 Raw Data Sources → Ingestion (Python) → Transformation (dbt / Databricks) → Snowflake → BI & Analytics
+
 ---
 
 ## Tech Stack
@@ -32,6 +32,14 @@ Raw Data Sources → Ingestion (Python) → Transformation (dbt / Databricks) �
 
 ---
 
-
-
-
+## Project Structure
+cloud-marketing-pipeline/ \
+│── dags/ # Airflow DAGs \
+│── src/ # Python ETL scripts \
+│── raw_data/ # Ignored - raw input files \
+│── processed_data/ # Ignored - processed outputs \
+│── sample_datasets/ # Versioned test data \
+│── config/ # Pipeline configuration (YAML/INI) \
+│── tests/ # Unit tests (pytest) \
+│── README.md # Project documentation \
+│── requirements.txt # Python dependencies
