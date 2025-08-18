@@ -14,7 +14,12 @@ The goal is to build a reliable, scalable pipeline for marketing analytics teams
  
 - **Data Transformation**
   - Cleansing and standardization of campaign and ad platform data.
-  - Schema alignment to create a unified marketing performance dataset. 
+  - Schema alignment to create a unified marketing performance dataset.
+ 
+- **Data Loading**
+
+- **Orchestration**  
+  - **Airflow DAGs** manage scheduling, retries, and monitoring. 
 
 - **Scalability**  
   - Local development with PostgresQL.  
@@ -26,8 +31,12 @@ Raw Data Sources → Ingestion (Python) → Transformation (dbt / Databricks) �
 ---
 
 ## Tech Stack
-- **Python** – data ingestion, validation, transformation  
-- **PostgreSQL** – lightweight local testing  
+- **Python** – data ingestion, validation, transformation
+- **Airflow** – orchestration and scheduling 
+- **Snowflake** – cloud data warehouse
+- **Databricks** – large-scale processing and transformation  
+- **dbt** – SQL-based transformations in Snowflake
+- **PostgreSQL** – lightweight local testing
 - **GitHub Actions** – CI/CD  
 
 ---
