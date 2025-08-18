@@ -2,19 +2,32 @@
 *.log
 *.tmp
 
+# macOS system file
+.DS_Store
+
 # Virtual environments
 venv/
 .venv/
 
 # Python-specific files
 __pycache__/
+*.pytest_cache/
+.pytest_cache/
 
-# Data
-/raw_data/
+# Data folders
+raw_data/
+processed_data/
+
+# Data files (ignore all except sample_datasets)
 *.csv
 *.json
 *.txt
 
+# Keep sample datasets in Git
+!sample_datasets/
+!sample_datasets/**
+
 # Config
 *.ini
+*.yaml
 /.snowflake
