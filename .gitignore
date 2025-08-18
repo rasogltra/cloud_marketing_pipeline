@@ -1,0 +1,20 @@
+# Ignore temporary files
+*.log
+*.tmp
+
+# Virtual environments
+venv/
+.venv/
+
+# Python-specific files
+__pycache__/
+
+# Data
+/raw_data/
+*.csv
+*.json
+*.txt
+
+# Config
+*.ini
+/.snowflake
