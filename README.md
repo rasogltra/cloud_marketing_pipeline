@@ -13,7 +13,7 @@ The goal is to build a reliable, scalable pipeline for marketing analytics teams
   - Metadata tracking for ingestion time, source, and validation.
  
 - **Data Transformation**
-- Cleansing and standardization of campaign and ad platform data.
+  - Cleansing and standardization of campaign and ad platform data.
  
 ---
 
