@@ -22,6 +22,7 @@ The goal is to build a reliable, scalable pipeline for marketing analytics teams
     
 ---
 ## Architecture
+Raw Data Sources → Ingestion (Python) → Transformation (dbt / Databricks) → Snowflake → BI & Analytics
 ---
 
 ## Tech Stack
