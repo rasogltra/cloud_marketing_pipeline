@@ -12,6 +12,9 @@ The goal is to build a reliable, scalable pipeline for marketing analytics teams
   - Batch ingestion of CSV, JSON, and log files from raw data sources.  
   - Metadata tracking for ingestion time, source, and validation.
  
+- **Data Transformation**
+- Cleansing and standardization of campaign and ad platform data.
+ 
 ---
 
 - **Scalability**  
