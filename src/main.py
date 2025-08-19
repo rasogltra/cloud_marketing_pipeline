@@ -10,12 +10,6 @@ from database.database_writer import DatabaseWriter
 logger = logging.getLogger(__name__)
 logger.info("Application started.")
 
-# Get ConfigParser object
-config = get_config()
-if not config:
-    logger.error("Failed to load configuration. Exiting.")
-    exit(1)
-    
 # Access directories
 data_directory = config.get('Paths','data_directory')
 log_directory = config.get('Paths','log_directory')
@@ -23,6 +17,7 @@ processed_directory = config.get('Paths', 'processed_directory')
 
 # Configure logging to write to a file
 log_path = os.path.join(log_directory, "etl.log")
+
 logging.basicConfig(
     level= logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -31,6 +26,14 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
+
+# Get ConfigParser object
+config = get_config()
+if not config:
+    logger.error("Failed to load configuration. Exiting.")
+    exit(1)
+# ===============================================
+    
 
 merged_df = pd.DataFrame()
 df_master = pd.DataFrame()
@@ -53,11 +56,11 @@ try:
         fullpath = os.path.join(data_directory, filename) 
         try:
             if fnmatch.fnmatch(filename, '*.csv'):
-                loader = CSVLoader(filename, fullpath)
+                loader = CSVLoader(fullpath)
             elif fnmatch.fnmatch(filename, '*.json'):
-                loader = JSONLoader(filename, fullpath)
+                loader = JSONLoader(fullpath)
             elif fnmatch.fnmatch(filename, '*.txt'):
-                loader = TextLoader(filename, fullpath)
+                loader = TextLoader(fullpath)
             else:
                 logger.warning(f"Unsupported file format: {filename}")
                 continue
