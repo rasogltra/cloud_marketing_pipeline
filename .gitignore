@@ -20,17 +20,13 @@ raw_data/
 processed_data/
 logs/
 
-# Data files (ignore all except sample_datasets)
+# Data files
 *.csv
 *.json
 *.txt
 
 # Docker Postgres volume data
 mkt_pipeline_db_postgres_data
-
-# Keep sample datasets in Git
-!sample_datasets/
-!sample_datasets/**
 
 # Config
 *.ini
