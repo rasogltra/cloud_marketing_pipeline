@@ -20,11 +20,6 @@ raw_data/
 processed_data/
 logs/
 
-# Data files
-*.csv
-*.json
-*.txt
-
 # Docker Postgres volume data
 mkt_pipeline_db_postgres_data
 
