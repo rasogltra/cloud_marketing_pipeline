@@ -65,16 +65,16 @@ class CSVLoader(BaseLoader):
         super().__init__(fullpath)
         self.delimiter = delimiter
         self.filename = os.path.basename(self.fullpath)
-        self.pattern = r'^AD_SPEND_[a-zA-Z0-9_]+_\d{8}.csv$'
+        self.pattern = r'^AD_SPEND_[a-zA-Z0-9_]+_\d{8}.csv'
     
     def _validate_file(self):
         super()._validate_file()
         
-        if not self.filename.lower().endswith(".csv"):
+        if not self.filename.endswith(".csv"):
             raise ValueError("Invalid file extension. Check file.")
         
-        if re.match(self.pattern, self.filename) is None:
-            logger.warning("Invalid filename pattern. Check file.")
+        if re.match(self.pattern, self.filename, re.IGNORECASE) is None:
+            logger.warning("Invalid CSV filename pattern. Check file.")
         
         req_columns = ['Date', 'Channel', 'Spend_usd', 'Client']
         
@@ -106,16 +106,16 @@ class JSONLoader (BaseLoader):
     def __init__(self, fullpath):
         super().__init__(fullpath)
         self.filename = os.path.basename(self.fullpath)
-        self.pattern = r'^CLICKSTREAMS_[a-zA-Z0-9_]+_\d{8}.json'
+        self.pattern = r'^PERFORMANCE_[a-zA-Z0-9_]+_\d{8}.json'
     
     def _validate_file(self):
         super()._validate_file()
         
         try:
-            if not self.filename.lower().endswith(".json"):
+            if not self.filename.endswith(".json"):
                 raise ValueError("Invalid file extension. Check file")
-            elif re.match(self.pattern, self.filename) is None:
-                logger.warning("Invalid filename pattern. Check file")
+            elif re.match(self.pattern, self.filename, re.IGNORECASE) is None:
+                logger.warning("Invalid JSON filename pattern. Check file")
             else:
                 logger.info(f"File {self.filename} passed validation check.")
         except Exception as error:
@@ -144,16 +144,16 @@ class TextLoader (BaseLoader):
     def __init__(self, fullpath):
         super().__init__(fullpath)
         self.filename = os.path.basename(self.fullpath)
-        self.pattern = r'^PERFORMANCE_[a-zA-Z0-9_]+_\d{8}.txt'
+        self.pattern = r'^CLICKSTREAMS_[a-zA-Z0-9_]+_\d{8}.txt'
     
     def _validate_file(self):
         super()._validate_file()
         
         try:
-            if not self.filename.lower().endswith(".txt"):
+            if not self.filename.endswith(".txt"):
                 raise ValueError("Invalid file extension. Check file")
-            elif re.match(self.pattern, self.filename) is None:
-                logger.warning("Invalid filename pattern. Check file")
+            elif re.match(self.pattern, self.filename, re.IGNORECASE) is None:
+                logger.warning("Invalid Text filename pattern. Check file")
             else:
                 logger.info(f"File {self.filename} passed validation check.")
         except Exception as error:
@@ -179,7 +179,7 @@ class TextLoader (BaseLoader):
                     if len(parts) !=  self.required_columns:
                         raise ValueError (f"Invalid text format in {self.filename}: {line}")   
                     
-                    parsed_log_data.append(parts)
+                    parsed_log_data.append(curr_log_entry)
             return parsed_log_data 
         except Exception as error:
             logger.error(f"Failed to parse text for {self.filename}: {error}. Skipping file.")

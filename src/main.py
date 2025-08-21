@@ -1,40 +1,45 @@
 # main.py
-import config,fnmatch,os
+import fnmatch, os
 import pandas as pd
 import logging
+from configparser import ConfigParser
 from datetime import datetime
 from etl.etl import CSVLoader, JSONLoader, TextLoader
 from database.config import get_config, get_db_engine
 from database.database_writer import DatabaseWriter
 
-logger = logging.getLogger(__name__)
-logger.info("Application started.")
-
+# Load config object
+config = get_config()
+if not config:
+    print("Failed to load configuration. Exiting.")
+    exit(1)
+    
 # Access directories
-data_directory = config.get('Paths','data_directory')
-log_directory = config.get('Paths','log_directory')
+data_directory = config.get('Paths', 'data_directory')
+log_directory = config.get('Paths', 'log_directory')
 processed_directory = config.get('Paths', 'processed_directory')
 
-# Configure logging to write to a file
+os.makedirs(data_directory, exist_ok=True)
+os.makedirs(log_directory, exist_ok=True)
+os.makedirs(processed_directory, exist_ok=True)
+
+# Configure logging
 log_path = os.path.join(log_directory, "etl.log")
 
 logging.basicConfig(
     level= logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers= [
+    handlers = [
         logging.FileHandler(log_path, encoding='utf-8', mode='a'),
         logging.StreamHandler()
     ]
 )
 
-# Get ConfigParser object
-config = get_config()
-if not config:
-    logger.error("Failed to load configuration. Exiting.")
-    exit(1)
 # ===============================================
-    
 
+logger = logging.getLogger(__name__)
+logger.info("Application started.")
+    
 merged_df = pd.DataFrame()
 df_master = pd.DataFrame()
 
@@ -108,6 +113,6 @@ DatabaseWriter.report_table(engine)
 
 # Save the master report
 logger.info(f"Write CSV report to {processed_directory}")
-path = os.path.join(processed_directory, f"summary_report_{datetime.now().strftime("%Y%m%d")}.csv")
+path = os.path.join(processed_directory, f"summary_report_{datetime.now()}.csv")
 #df_master = DatabaseWriter.build_metadata("merged_pipeline", data_directory, df_master)
 df_master.to_csv(path, index=False)

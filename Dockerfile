@@ -1,14 +1,16 @@
-FROM python:3.13-slim-trixie
+FROM python:3.9-slim-buster
 
-# sets the working dir inside container
-WORKDIR /app 
+WORKDIR /app
 
 COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# installs app dependencies specified in requirements.txt
-RUN pip3 install --no-cache-dir -r requirements.txt
+# Copy the rest of the app code
+COPY src/ ./src
+COPY config/ ./config
+COPY README.md .
 
-# copies the app code from local into container
-COPY . .
+# Mount directories
+RUN mkdir -p raw_data processed_data logs
 
-CMD ["python", "main.py"]
+CMD ["python", "src/main.py"]

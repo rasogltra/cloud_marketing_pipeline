@@ -18,6 +18,7 @@ __pycache__/
 # Data folders
 raw_data/
 processed_data/
+logs/
 
 # Data files (ignore all except sample_datasets)
 *.csv

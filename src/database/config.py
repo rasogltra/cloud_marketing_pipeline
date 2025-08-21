@@ -6,15 +6,16 @@ logger = logging.getLogger(__name__)
 _engine = None
 
 def get_config():
-        parser = ConfigParser()
-        root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..'))
-        path = os.path.join(root,'config' ,'config.ini')
-        
-        parser.read(path)
+    env = os.getenv("APP_ENV", "local") # default to local
+    root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..'))
+    path = os.path.join(root,'config' ,f"config.{env}.ini")
     
-        if not parser.read(path):
-            raise FileNotFoundError(f"config.ini file not found: {path}")
-        return parser
+    parser = ConfigParser()
+    read_files =parser.read(path)
+
+    if not read_files:
+        raise FileNotFoundError(f"config.ini file not found: {path}")
+    return parser
 
 def get_db_engine():
     global _engine
@@ -28,9 +29,8 @@ def get_db_engine():
         for key, value in config.items('Postgresql'):
             db_params[key] = value
     else:
-        logger.error("Database section not found in config file.")
-        exit(1)
-    
+        raise ValueError("Database section not found in config file.")
+
     try:
         connection_str = (
             f"postgresql+psycopg2://{db_params['user']}:{db_params['password']}"

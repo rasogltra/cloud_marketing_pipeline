@@ -1,0 +1,35 @@
+services:
+  etl:
+    build: .
+    container_name: cloud-marketing-app
+    depends_on:
+      - pgdatabase
+    volumes:
+      - ./src:/app/src
+      - ./raw_data:/app/raw_data
+      - ./processed_data:/app/processed_data
+      - ./logs:/app/logs
+    environment:
+      DB_HOST: pgdatabase
+      DB_PORT: 5432
+      DB_USER: root
+      DB_PASS: root
+      DB_NAME: mkt_pipeline_db
+      APP_ENV: docker
+  pgdatabase:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: mkt_pipeline_db
+    volumes:
+      - "./mkt_pipeline_db_postgres_data:/var/lib/postgresql/data:rw"
+    ports:
+      - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "8080:80"
