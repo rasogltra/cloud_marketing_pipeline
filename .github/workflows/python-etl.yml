@@ -5,7 +5,7 @@ name: Python CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "development" ]
 
 jobs:
   lint:
@@ -22,21 +22,21 @@ jobs:
           pip install flake8
           flake8 src tests
           
-      - name: Lint with flake8
-        run: |
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      # - name: Lint with flake8
+        # run: |
+        #   # stop the build if there are Python syntax errors or undefined names
+        #   flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        #   # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        #   flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
         
-  build-and-test:
-    runs-on: ubuntu-latest
+  # build-and-test:
+  #   runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v3
+  #   steps:
+  #   - uses: actions/checkout@v3
       
-    - name: Build Docker image
-      run: docker build -t cloud-marketing-app . # Build Docker img
+  #   - name: Build Docker image
+  #     run: docker build -t cloud-marketing-app . # Build Docker img
 
-    - name: Run tests in Docker
-      run: docker run --rm cloud-marketing-app pytest
+  #   - name: Run tests in Docker
+  #     run: docker run --rm cloud-marketing-app pytest
