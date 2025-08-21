@@ -5,7 +5,7 @@ name: Python CI/Lint
 
 on:
   push:
-    branches: [ "development" ]
+    branches: [ "development", "main" ]
 
 jobs:
   lint:

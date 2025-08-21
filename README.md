@@ -53,4 +53,4 @@ cloud-marketing-pipeline/ \
 │── README.md # Project documentation \
 │── requirements.txt # Python dependencies
 
-![Python CI/lint](https://github.com/rasogltra/cloud_marketing_pipeline/actions/workflows/ci.yml/badge.svg)
+![Python CI/lint](https://github.com/rasogltra/cloud_marketing_pipeline/actions/workflows/ci.yml/badge.svg?branch=main)
