@@ -25,6 +25,9 @@ logs/
 *.json
 *.txt
 
+# Database specific files
+mkt_pipeline_db_postgres_data/
+
 # Keep sample datasets in Git
 !sample_datasets/
 !sample_datasets/**
