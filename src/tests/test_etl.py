@@ -1,4 +1,5 @@
-import pytest, json
+import pytest
+import json
 import logging
 from src.etl.etl import CSVLoader, JSONLoader, TextLoader
 import tempfile
@@ -61,7 +62,7 @@ class TestCSVLoader:
             loader._validate_file()
 
         assert any(
-            f"missing the required columns. Skipping file." in msg
+            "missing the required columns. Skipping file." in msg
             for msg in caplog.messages
         )
         assert any(loader.filename in msg for msg in caplog.messages)
@@ -104,7 +105,8 @@ class TestJSONLoader:
             loader._validate_file()
 
         assert any(
-            "Invalid filename pattern. Check file" in msg for msg in caplog.messages
+            "Invalid filename pattern. Check file" in msg 
+            for msg in caplog.messages
         )
 
     def test_invalid_parse_json(self, tmp_path, caplog):
@@ -153,7 +155,8 @@ class TestTextLoader:
             loader._validate_file()
 
         assert any(
-            "Invalid filename pattern. Check file" in msg for msg in caplog.messages
+            "Invalid filename pattern. Check file" in msg 
+            for msg in caplog.messages
         )
 
     def test_invalid_parse_txt(self, tmp_path, caplog):

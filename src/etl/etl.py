@@ -3,8 +3,10 @@
 # etl.py
 
 import pandas as pd
-import os, re, json, logging
-from datetime import datetime
+import os
+import re
+import json
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +20,7 @@ class BaseLoader:
     def _validate_file(self):
         """validates filenames and file structure"""
         if not os.path.exists(self.fullpath):
-            logger.error(f"File doesn't exists. Check folders. ")
+            logger.error("File doesn't exists. Check folders. ")
             raise FileNotFoundError(f"File in path {self.fullpath} not found.")
 
     def _read_source(self):

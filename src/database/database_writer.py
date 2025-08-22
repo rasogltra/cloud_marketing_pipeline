@@ -16,7 +16,10 @@ class DatabaseWriter:
         try:
             if self.engine is not None:
                 df.to_sql(
-                    name=table_name, con=self.engine, if_exists="replace", index=False
+                    name=table_name,
+                    con=self.engine,
+                    if_exists="replace",
+                    index=False
                 )
 
                 logger.info(f"Sucessfully wrote {len(df)} rows to {table_name}")
@@ -42,12 +45,18 @@ class DatabaseWriter:
     def report_table(engine):
         print("\n --- Reported Metric Data ---")
 
-        query1 = "SELECT channel, SUM(spend_usd) FROM ads_data GROUP BY channel"
+        query1 = (
+            "SELECT channel, SUM(spend_usd) FROM"
+            "ads_data GROUP BY channel"
+            )
         result1 = pd.read_sql(query1, engine)
         print("\n--- Spend by Channel ---")
         print(result1.to_string())
 
-        query2 = "SELECT channel, SUM(clicks), SUM(conversions) FROM  performance_data GROUP BY channel"
+        query2 = (
+            "SELECT channel, SUM(clicks), SUM(conversions) FROM"  
+            "performance_data GROUP BY channel"
+            )
         result2 = pd.read_sql(query2, engine)
         print("\n--- Total clicks and conversions by Channel ---")
         print(result2.to_string())

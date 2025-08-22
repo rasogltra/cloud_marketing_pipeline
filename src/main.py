@@ -1,8 +1,8 @@
 # main.py
-import fnmatch, os
+import fnmatch
+import os
 import pandas as pd
 import logging
-from configparser import ConfigParser
 from datetime import datetime
 from etl.etl import CSVLoader, JSONLoader, TextLoader
 from database.config import get_config, get_db_engine
@@ -107,7 +107,7 @@ if not merged_df.empty and not text_df.empty:
 else:
     df_master = merged_df
 
-logger.info(f"File ingestion finished...")
+logger.info("File ingestion finished...")
 
 DatabaseWriter.report_table(engine)
 
