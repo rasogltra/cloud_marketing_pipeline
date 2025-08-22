@@ -92,7 +92,7 @@ class CSVLoader(BaseLoader):
             if not all(col in col_names for col in req_columns):
                 logger.warning(
                     f"CSV file {self.filename} is missing the required columns."
-                    "Skipping file."
+                    f" Skipping file."
                 )
             else:
                 logger.info(f"File {self.filename} passed validation check.")
