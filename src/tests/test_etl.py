@@ -52,7 +52,7 @@ class TestCSVLoader:
             loader._validate_file()
 
         assert any(
-            "Invalid filename pattern. Check file." in msg
+            "Invalid CSV filename pattern. Check file." in msg
             for msg in caplog.messages
         )
 
@@ -69,7 +69,8 @@ class TestCSVLoader:
             loader._validate_file()
 
         assert any(
-            "missing the required columns. Skipping file." in msg
+            "CSV file AD_SPEND_DUMMY_20250819.csv is missing the required columns. Skipping file." 
+            in msg
             for msg in caplog.messages
         )
         assert any(loader.filename in msg for msg in caplog.messages)
@@ -112,7 +113,7 @@ class TestJSONLoader:
             loader._validate_file()
 
         assert any(
-            "Invalid filename pattern. Check file" in msg
+            "Invalid JSON filename pattern. Check file" in msg
             for msg in caplog.messages
         )
 
@@ -167,7 +168,7 @@ class TestTextLoader:
             loader._validate_file()
 
         assert any(
-            "Invalid filename pattern. Check file" in msg
+            "Invalid Text filename pattern. Check file" in msg
             for msg in caplog.messages
         )
 
