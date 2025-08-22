@@ -69,7 +69,8 @@ class TestCSVLoader:
             loader._validate_file()
 
         assert any(
-            "CSV file AD_SPEND_DUMMY_20250819.csv is missing the required columns. Skipping file." 
+            "CSV file AD_SPEND_DUMMY_20250819.csv"
+            "is missing the required columns. Skipping file."
             in msg
             for msg in caplog.messages
         )
