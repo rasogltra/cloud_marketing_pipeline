@@ -138,7 +138,8 @@ class TestTextLoader:
             mode="w+", suffix=".txt", delete=False
         ) as f:
             f.write(
-                "client: Dummy | date: 08/19/2025 | channel: Dummy | event: dummy"
+                "client: Dummy | date: 08/19/2025 |"
+                "channel: Dummy | event: dummy"
             )
             f_path = Path(f.name)
         yield str(f_path)
