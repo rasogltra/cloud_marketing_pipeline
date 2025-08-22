@@ -96,7 +96,8 @@ csv_df = (
     pd.concat(csv_frames, ignore_index=True) if csv_frames else pd.DataFrame()
 )
 json_df = (
-    pd.concat(json_frames, ignore_index=True) if json_frames else pd.DataFrame()
+    pd.concat(
+        json_frames, ignore_index=True) if json_frames else pd.DataFrame()
 )
 text_df = (
     pd.concat(text_frames, ignore_index=True) if text_frames else pd.DataFrame()
@@ -104,12 +105,15 @@ text_df = (
 
 # Join
 if not csv_df.empty and not json_df.empty:
-    merged_df = csv_df.merge(json_df, on=["client", "date", "channel"], how="left")
+    merged_df = csv_df.merge(
+        json_df, on=["client", "date", "channel"], how="left")
 else:
     merged_df = csv_df
 
 if not merged_df.empty and not text_df.empty:
-    df_master = merged_df.merge(text_df, on=["client", "date", "channel"], how="left")
+    df_master = merged_df.merge(
+        text_df, on=["client", "date", "channel"], how="left"
+        )
 else:
     df_master = merged_df
 
