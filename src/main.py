@@ -92,9 +92,15 @@ except Exception as error:
     logger.error(f"Error reading files into dataframe and database: {error}")
 
 # Merge all files together
-csv_df = pd.concat(csv_frames, ignore_index=True) if csv_frames else pd.DataFrame()
-json_df = pd.concat(json_frames, ignore_index=True) if json_frames else pd.DataFrame()
-text_df = pd.concat(text_frames, ignore_index=True) if text_frames else pd.DataFrame()
+csv_df = (
+        pd.concat(csv_frames, ignore_index=True) if csv_frames else pd.DataFrame()
+)
+json_df = (
+        pd.concat(json_frames, ignore_index=True) if json_frames else pd.DataFrame()
+)
+text_df = (
+    pd.concat(text_frames, ignore_index=True) if text_frames else pd.DataFrame()
+)
 
 # Join
 if not csv_df.empty and not json_df.empty:
