@@ -25,7 +25,7 @@ class DatabaseWriter:
                 logger.info(f"Sucessfully wrote:"
                             f"{len(df)} rows to {table_name}")
             else:
-                logger.info(f"Error writing dataframe to {table_name}: {error}")
+                logger.error(f"Error writing dataframe to {table_name}.")
         except Exception as error:
             print(f"Unexpected error occurred: {error}")
 
@@ -55,7 +55,7 @@ class DatabaseWriter:
         print(result1.to_string())
 
         query2 = (
-            "SELECT channel, SUM(clicks), SUM(conversions) FROM"  
+            "SELECT channel, SUM(clicks), SUM(conversions) FROM"
             "performance_data GROUP BY channel"
             )
         result2 = pd.read_sql(query2, engine)
