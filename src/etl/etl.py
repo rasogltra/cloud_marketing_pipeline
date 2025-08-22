@@ -91,13 +91,15 @@ class CSVLoader(BaseLoader):
 
             if not all(col in col_names for col in req_columns):
                 logger.warning(
-                    f"CSV file {self.filename} is missing the required columns."
-                    f" Skipping file.")
+                    f"CSV file {self.filename}"
+                    f" is missing required columns. Skipping file.")
             else:
                 logger.info(f"File {self.filename} passed validation check.")
 
         except Exception as error:
-            logger.warning(f"File {self.filename} encountered a header error: {error}.")
+            logger.warning(f"File {self.filename}"
+                           f"encountered a header error: {error}."
+                           )
 
     def _read_source(self):
         return pd.read_csv(self.fullpath, sep=self.delimiter)
