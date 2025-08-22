@@ -11,7 +11,6 @@ def get_config():
     env = os.getenv("APP_ENV", "local")  # default to local
     root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
     path = os.path.join(root, 'config', f"config.{env}.ini")
-
     parser = ConfigParser()
     read_files = parser.read(path)
 
@@ -24,7 +23,6 @@ def get_db_engine():
     global _engine
     if _engine is not None:
         return _engine
-
     config = get_config()
 
     db_params = {}
