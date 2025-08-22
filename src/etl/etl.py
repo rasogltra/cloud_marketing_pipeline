@@ -140,7 +140,8 @@ class JSONLoader(BaseLoader):
             obj = json.loads(raw)
         except json.JSONDecodeError as error:
             logger.error(
-                f"Failed to parse JSON for {self.filename}: {error}. Skipping file."
+                f"Failed to parse JSON for {self.filename}: {error}."
+                f" Skipping file."
             )
             return None
         return obj
@@ -198,7 +199,8 @@ class TextLoader(BaseLoader):
             return parsed_log_data
         except Exception as error:
             logger.error(
-                f"Failed to parse text for {self.filename}: {error}. Skipping file."
+                f"Failed to parse text for {self.filename}: {error}."
+                f" Skipping file."
             )
             return None
 
