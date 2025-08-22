@@ -93,10 +93,10 @@ except Exception as error:
 
 # Merge all files together
 csv_df = (
-        pd.concat(csv_frames, ignore_index=True) if csv_frames else pd.DataFrame()
+    pd.concat(csv_frames, ignore_index=True) if csv_frames else pd.DataFrame()
 )
 json_df = (
-        pd.concat(json_frames, ignore_index=True) if json_frames else pd.DataFrame()
+    pd.concat(json_frames, ignore_index=True) if json_frames else pd.DataFrame()
 )
 text_df = (
     pd.concat(text_frames, ignore_index=True) if text_frames else pd.DataFrame()
@@ -119,6 +119,10 @@ DatabaseWriter.report_table(engine)
 
 # Save the master report
 logger.info(f"Write CSV report to {processed_directory}")
-path = os.path.join(processed_directory, f"summary_report_{datetime.now()}.csv")
-df_master = DatabaseWriter.build_metadata("merged_pipeline", data_directory, df_master)
+path = (
+    os.path.join(processed_directory, f"summary_report_{datetime.now()}.csv")
+)
+df_master = DatabaseWriter.build_metadata(
+    "merged_pipeline", data_directory, df_master
+)
 df_master.to_csv(path, index=False)
