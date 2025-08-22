@@ -19,8 +19,9 @@ class TestCSVLoader:
             f.write(
                 "Client,Date,Channel,Campaign_id,Spend_usd\n"
                 "Dummy,2024-06-21,Google,camp_007,754.47"
-        )
+            )
         f_path = Path(f.name)
+        
         yield str(f_path)
         f_path.unlink()
 
@@ -52,13 +53,14 @@ class TestCSVLoader:
             loader._validate_file()
 
         assert any(
-            "Invalid filename pattern. Check file." in msg for msg in caplog.messages
+            "Invalid filename pattern. Check file." in msg 
+            for msg in caplog.messages
         )
 
     def test_valid_columns(self, tmp_path, caplog):
         bad_columns = tmp_path / "AD_SPEND_DUMMY_20250819.csv"
         bad_columns.write_text(
-        "Client,Date,,Campaign_id,Spend_usd\nDummy,2024-06-21,Google,camp_007,754.47"
+            "Client,Date,,Campaign_id,Spend_usd\nDummy,2024-06-21,Google,camp_007,754.47"
         )
 
         loader = CSVLoader(str(bad_columns))
