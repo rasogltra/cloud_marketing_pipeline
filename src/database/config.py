@@ -13,17 +13,19 @@ def get_config():
     path = os.path.join(root, 'config', f"config.{env}.ini")
     
     parser = ConfigParser()
-    read_files =parser.read(path)
+    read_files = parser.read(path)
 
     if not read_files:
         raise FileNotFoundError(f"config.ini file not found: {path}")
     return parser
 
 def get_db_engine():
+    
+    
     global _engine
     if _engine is not None:
         return _engine
-    
+
     config = get_config()
     
     db_params = {}
@@ -43,4 +45,4 @@ def get_db_engine():
         return _engine
     except Exception as error:
         logger.error(f"Unable to establish connection to database: {error}")
-        
+           
