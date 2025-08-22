@@ -114,5 +114,5 @@ DatabaseWriter.report_table(engine)
 # Save the master report
 logger.info(f"Write CSV report to {processed_directory}")
 path = os.path.join(processed_directory, f"summary_report_{datetime.now()}.csv")
-# df_master = DatabaseWriter.build_metadata("merged_pipeline", data_directory, df_master)
+df_master = DatabaseWriter.build_metadata("merged_pipeline", data_directory, df_master)
 df_master.to_csv(path, index=False)

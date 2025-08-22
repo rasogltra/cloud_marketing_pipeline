@@ -32,7 +32,8 @@ class TestCSVLoader:
 
         loader = CSVLoader(str(bad_file))
 
-        with pytest.raises(ValueError, match="Invalid file extension. Check file."):
+        with pytest.raises(ValueError, 
+                           match="Invalid file extension. Check file."):
             loader._validate_file()
 
     def test_invalid_filename_pattern(self, tmp_path, caplog):
@@ -127,7 +128,11 @@ class TestTextLoader:
 
     @pytest.fixture
     def temp_txt_file(self):
-        with tempfile.NamedTemporaryFile(mode="w+", suffix=".txt", delete=False) as f:
+        with tempfile.NamedTemporaryFile(
+            mode="w+", 
+            suffix=".txt", 
+            delete=False
+        ) as f:
             f.write("client: Dummy | date: 08/19/2025 | channel: Dummy | event: dummy")
             f_path = Path(f.name)
         yield str(f_path)
