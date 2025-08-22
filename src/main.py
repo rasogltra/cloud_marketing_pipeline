@@ -100,7 +100,8 @@ json_df = (
         json_frames, ignore_index=True) if json_frames else pd.DataFrame()
 )
 text_df = (
-    pd.concat(text_frames, ignore_index=True) if text_frames else pd.DataFrame()
+    pd.concat(
+        text_frames, ignore_index=True) if text_frames else pd.DataFrame()
 )
 
 # Join

@@ -13,7 +13,8 @@ class TestCSVLoader:
 
     @pytest.fixture
     def temp_csv_file(self):
-        with tempfile.NamedTemporaryFile(mode="w+", suffix=".csv", delete=False) as f:
+        with tempfile.NamedTemporaryFile(
+            mode="w+", suffix=".csv", delete=False) as f:
             f.write(
                 "Client,Date,Channel,Campaign_id,Spend_usd\nDummy,2024-06-21,Google,camp_007,754.47"
             )
@@ -31,9 +32,9 @@ class TestCSVLoader:
         bad_file.write_text("some data,to,test\n")
 
         loader = CSVLoader(str(bad_file))
-
+        
         with pytest.raises(ValueError, 
-                           match="Invalid file extension. Check file."):
+            match="Invalid file extension. Check file."):
             loader._validate_file()
 
     def test_invalid_filename_pattern(self, tmp_path, caplog):
@@ -54,7 +55,7 @@ class TestCSVLoader:
     def test_valid_columns(self, tmp_path, caplog):
         bad_columns = tmp_path / "AD_SPEND_DUMMY_20250819.csv"
         bad_columns.write_text(
-            "Client,Date,,Campaign_id,Spend_usd\nDummy,2024-06-21,Google,camp_007,754.47"
+        "Client,Date,,Campaign_id,Spend_usd\nDummy,2024-06-21,Google,camp_007,754.47"
         )
 
         loader = CSVLoader(str(bad_columns))
@@ -106,7 +107,7 @@ class TestJSONLoader:
             loader._validate_file()
 
         assert any(
-            "Invalid filename pattern. Check file" in msg 
+            "Invalid filename pattern. Check file" in msg
             for msg in caplog.messages
         )
 
@@ -160,7 +161,7 @@ class TestTextLoader:
             loader._validate_file()
 
         assert any(
-            "Invalid filename pattern. Check file" in msg 
+            "Invalid filename pattern. Check file" in msg
             for msg in caplog.messages
         )
 
