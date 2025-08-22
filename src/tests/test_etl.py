@@ -59,7 +59,8 @@ class TestCSVLoader:
     def test_valid_columns(self, tmp_path, caplog):
         bad_columns = tmp_path / "AD_SPEND_DUMMY_20250819.csv"
         bad_columns.write_text(
-            "Client,Date,,Campaign_id,Spend_usd\nDummy,2024-06-21,Google,camp_007,754.47"
+            "Client,Date,,Campaign_id,Spend_usd\n"
+            "Dummy,2024-06-21,Google,camp_007,754.47"
         )
 
         loader = CSVLoader(str(bad_columns))
