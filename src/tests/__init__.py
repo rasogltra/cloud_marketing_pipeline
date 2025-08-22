@@ -1,1 +1,1 @@
-# This file makes 'tests' a package
+# src/tests/__init__.py

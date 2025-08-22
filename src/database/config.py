@@ -1,14 +1,17 @@
 from configparser import ConfigParser
 from sqlalchemy import create_engine
-import os, logging
+import os
+import logging
 
 logger = logging.getLogger(__name__)
 _engine = None
 
+
+
 def get_config():
-    env = os.getenv("APP_ENV", "local") # default to local
-    root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..','..'))
-    path = os.path.join(root,'config' ,f"config.{env}.ini")
+    env = os.getenv("APP_ENV", "local")  # default to local
+    root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+    path = os.path.join(root, 'config', f"config.{env}.ini")
     
     parser = ConfigParser()
     read_files =parser.read(path)
@@ -36,9 +39,7 @@ def get_db_engine():
             f"postgresql+psycopg2://{db_params['user']}:{db_params['password']}"
             f"@{db_params['host']}:5432/{db_params['database_name']}"
         )
-        
         _engine = create_engine(connection_str)
-        
         return _engine
     except Exception as error:
         logger.error(f"Unable to establish connection to database: {error}")
