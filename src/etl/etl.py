@@ -46,8 +46,8 @@ class BaseLoader:
                 return pd.DataFrame(records)
             else:
                 raise ValueError(
-                    f"List elements are neither all Dataframes"
-                    f"nor all dict-like objects."
+                    "List elements are neither all Dataframes"
+                    "nor all dict-like objects."
                 )
         else:
             raise TypeError("Unsupported type for records in _to_dataframe")
@@ -92,7 +92,7 @@ class CSVLoader(BaseLoader):
             if not all(col in col_names for col in req_columns):
                 logger.warning(
                     f"CSV file {self.filename} is missing the required columns."
-                    f"Skipping file."
+                    "Skipping file."
                 )
             else:
                 logger.info(f"File {self.filename} passed validation check.")
