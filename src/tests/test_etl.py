@@ -21,7 +21,6 @@ class TestCSVLoader:
                 "Dummy,2024-06-21,Google,camp_007,754.47"
             )
         f_path = Path(f.name)
-        
         yield str(f_path)
         f_path.unlink()
 
@@ -53,7 +52,7 @@ class TestCSVLoader:
             loader._validate_file()
 
         assert any(
-            "Invalid filename pattern. Check file." in msg 
+            "Invalid filename pattern. Check file." in msg
             for msg in caplog.messages
         )
 
