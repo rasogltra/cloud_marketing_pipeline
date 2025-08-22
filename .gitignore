@@ -24,6 +24,5 @@ logs/
 mkt_pipeline_db_postgres_data
 
 # Config
-*.ini
 *.yaml
 /.snowflake
