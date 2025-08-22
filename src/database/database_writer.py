@@ -22,9 +22,10 @@ class DatabaseWriter:
                     index=False
                 )
 
-                logger.info(f"Sucessfully wrote {len(df)} rows to {table_name}")
+                logger.info(f"Sucessfully wrote:"
+                            f"{len(df)} rows to {table_name}")
             else:
-                logger.error(f"Error writing dataframe to {table_name}: {error}")
+                logger.info(f"Error writing dataframe to {table_name}: {error}")
         except Exception as error:
             print(f"Unexpected error occurred: {error}")
 
