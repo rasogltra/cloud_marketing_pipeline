@@ -7,7 +7,6 @@ logger = logging.getLogger(__name__)
 _engine = None
 
 
-
 def get_config():
     env = os.getenv("APP_ENV", "local")  # default to local
     root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -33,13 +32,15 @@ def get_db_engine():
             db_params[key] = value
     else:
         raise ValueError("Database section not found in config file.")
-
+    
     try:
         connection_str = (
-            f"postgresql+psycopg2://{db_params['user']}:{db_params['password']}"
+            f"postgresql+psycopg2://"
+            f"{db_params['user']}:{db_params['password']}"
             f"@{db_params['host']}:5432/{db_params['database_name']}"
         )
         _engine = create_engine(connection_str)
         return _engine
     except Exception as error:
         logger.error(f"Unable to establish connection to database: {error}")
+        
