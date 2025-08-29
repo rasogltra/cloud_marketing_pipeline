@@ -1,0 +1,8 @@
+{
+    "file_name": "Metadata_2025-08-29 17:03:52.731850",
+    "file_type": "731850",
+    "ingestion_time": "2025-08-29 17:03:52",
+    "row_count": 31107,
+    "columns": "Client,Date,Channel,Campaign_id,Spend_usd,Impressions,Clicks,Conversions,Cost_Per_Click,Event",
+    "source_path": "./raw_data"
+}

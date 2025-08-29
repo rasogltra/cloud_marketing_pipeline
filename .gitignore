@@ -26,3 +26,5 @@ mkt_pipeline_db_postgres_data
 # Config
 *.yaml
 /.snowflake
+config/config.aws.ini
+

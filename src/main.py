@@ -17,19 +17,17 @@ if not config:
     exit(1)
 
 # Access directories
-DATA_DIRECTORY = config.get("Paths", "DATA_DIRECTORY")
-PROCESSED_DIRECTORY = config.get("Paths", "PROCESSED_DIRECTORY")
+DATA_DIRECTORY = config.get("Paths", "data_directory")
+LOG_DIRECTORY = config.get("Paths", "log_directory")
+PROCESSED_DIRECTORY = config.get("Paths", "processed_directory")
 
 os.makedirs(DATA_DIRECTORY, exist_ok=True)
 os.makedirs(PROCESSED_DIRECTORY, exist_ok=True)
 os.makedirs("logs", exist_ok=True)
 os.makedirs("metadata", exist_ok=True)
 
-ROOT_PATH = Path(__file__)
-
 # Configure logging
-LOG_PATH = os.path.join(ROOT_PATH / "logs", "etl.log")
-# LOG_PATH = os.path.join(LOG_DIRECTORY, "etl.log")
+LOG_PATH = os.path.join(LOG_DIRECTORY, "etl.log")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -42,7 +40,7 @@ logging.basicConfig(
 
 # ===============================================
 
-LOGGER = logging.getLOGGER(__name__)
+LOGGER = logging.getLogger(__name__)
 LOGGER.info("Application started.")
 
 merged_df = pd.DataFrame()
