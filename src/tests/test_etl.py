@@ -13,8 +13,8 @@ class TestCSVLoader:
 
     @pytest.fixture
     def temp_csv_file(self):
-        with tempfile.NamedTemporaryFile(mode="w+", 
-                                         suffix=".csv", 
+        with tempfile.NamedTemporaryFile(mode="w+",
+                                         suffix=".csv",
                                          delete=False) as f:
             f.write(
                 "Client,Date,Channel,Campaign_id,Spend_usd\n"
@@ -34,7 +34,8 @@ class TestCSVLoader:
         bad_file.write_text("some data,to,test\n")
         loader = CSVLoader(str(bad_file))
 
-        with pytest.raises(ValueError, match="Invalid file extension. Check file."):
+        with pytest.raises(ValueError,
+                           match="Invalid file extension. Check file."):
             loader._validate_file()
 
     def test_invalid_filename_pattern(self, tmp_path, caplog):
@@ -133,9 +134,12 @@ class TestTextLoader:
 
     @pytest.fixture
     def temp_txt_file(self):
-        with tempfile.NamedTemporaryFile(mode="w+", suffix=".txt", delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w+",
+                                         suffix=".txt",
+                                         delete=False) as f:
             f.write(
-                "client: Dummy | date: 08/19/2025 |" "channel: Dummy | event: dummy"
+                "client: Dummy | date: 08/19/2025 |"
+                "channel: Dummy | event: dummy"
             )
             f_path = Path(f.name)
         yield str(f_path)
