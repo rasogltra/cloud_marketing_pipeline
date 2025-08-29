@@ -1,11 +1,12 @@
 from configparser import ConfigParser
-from sqlalchemy import create_engine # type: ignore
+from sqlalchemy import create_engine  # type: ignore
 import os
 import logging
 from pathlib import Path
 
 LOGGER = logging.getLogger(__name__)
 _engine = None
+
 
 def get_config():
     env = os.getenv("APP_ENV", "local")  # default to local

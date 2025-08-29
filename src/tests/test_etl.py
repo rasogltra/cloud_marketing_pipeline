@@ -1,4 +1,4 @@
-import pytest # type: ignore
+import pytest  # type: ignore
 import json
 import logging
 from src.etl.etl import CSVLoader, JSONLoader, TextLoader
@@ -13,7 +13,9 @@ class TestCSVLoader:
 
     @pytest.fixture
     def temp_csv_file(self):
-        with tempfile.NamedTemporaryFile(mode="w+", suffix=".csv", delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w+", 
+                                         suffix=".csv", 
+                                         delete=False) as f:
             f.write(
                 "Client,Date,Channel,Campaign_id,Spend_usd\n"
                 "Dummy,2024-06-21,Google,camp_007,754.47"

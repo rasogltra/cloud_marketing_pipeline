@@ -8,7 +8,7 @@ from datetime import datetime
 from etl.etl import CSVLoader, JSONLoader, TextLoader
 from database.config import get_config, get_db_engine
 from database.database_writer import DatabaseWriter
-from pathlib import Path
+
 
 # Load config object
 config = get_config()

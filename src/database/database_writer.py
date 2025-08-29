@@ -16,7 +16,10 @@ class DatabaseWriter:
         try:
             if self.engine is not None:
                 df.to_sql(
-                    name=table_name, con=self.engine, if_exists="replace", index=False
+                    name=table_name,
+                    con=self.engine,
+                    if_exists="replace",
+                    index=False
                 )
 
                 LOGGER.info(f"Sucessfully wrote: " f"{len(df)} rows to {table_name}")
