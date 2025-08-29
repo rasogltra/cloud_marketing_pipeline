@@ -1,14 +1,10 @@
-#!/usr/bin/env python
-# coding: utf-8
-# etl.py
-
 import pandas as pd
 import os
 import re
 import json
 import logging
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 class BaseLoader:
@@ -20,7 +16,7 @@ class BaseLoader:
     def _validate_file(self):
         """validates filenames and file structure"""
         if not os.path.exists(self.fullpath):
-            logger.error("File doesn't exists. Check folders. ")
+            LOGGER.error("File doesn't exists. Check folders. ")
             raise FileNotFoundError(f"File in path {self.fullpath} not found.")
 
     def _read_source(self):
@@ -72,7 +68,7 @@ class CSVLoader(BaseLoader):
         super().__init__(fullpath)
         self.delimiter = delimiter
         self.filename = os.path.basename(self.fullpath)
-        self.pattern = r"^AD_SPEND_[a-zA-Z0-9_]+_\d{8}.csv"
+        self.pattern = r"^AD_SPEND_[a-zA-Z0-9_]+_\d{4}-\d{2}-\d{2}.csv"
 
     def _validate_file(self):
         super()._validate_file()
@@ -81,7 +77,7 @@ class CSVLoader(BaseLoader):
             raise ValueError("Invalid file extension. Check file.")
 
         if re.match(self.pattern, self.filename, re.IGNORECASE) is None:
-            logger.warning("Invalid CSV filename pattern. Check file.")
+            LOGGER.warning("Invalid CSV filename pattern. Check file.")
 
         req_columns = ["Date", "Channel", "Spend_usd", "Client"]
 
@@ -90,16 +86,17 @@ class CSVLoader(BaseLoader):
             col_names = list(header.columns)
 
             if not all(col in col_names for col in req_columns):
-                logger.warning(
+                LOGGER.warning(
                     f"CSV file {self.filename}"
-                    f" is missing required columns. Skipping file.")
+                    f" is missing required columns. Skipping file."
+                )
             else:
-                logger.info(f"File {self.filename} passed validation check.")
+                LOGGER.info(f"File {self.filename} passed validation check.")
 
         except Exception as error:
-            logger.warning(f"File {self.filename}"
-                           f"encountered a header error: {error}."
-                           )
+            LOGGER.warning(
+                f"File {self.filename}" f"encountered a header error: {error}."
+            )
 
     def _read_source(self):
         return pd.read_csv(self.fullpath, sep=self.delimiter)
@@ -109,7 +106,6 @@ class CSVLoader(BaseLoader):
 
     def _postprocess_df(self, df):
         df = super()._postprocess_df(df)
-        df.columns = df.columns.str.lower()
         return df
 
 
@@ -118,7 +114,7 @@ class JSONLoader(BaseLoader):
     def __init__(self, fullpath):
         super().__init__(fullpath)
         self.filename = os.path.basename(self.fullpath)
-        self.pattern = r"^PERFORMANCE_[a-zA-Z0-9_]+_\d{8}.json"
+        self.pattern = r"^PERFORMANCE_[a-zA-Z0-9_]+_\d{4}-\d{2}-\d{2}.json"
 
     def _validate_file(self):
         super()._validate_file()
@@ -127,11 +123,11 @@ class JSONLoader(BaseLoader):
             if not self.filename.endswith(".json"):
                 raise ValueError("Invalid file extension. Check file")
             elif re.match(self.pattern, self.filename, re.IGNORECASE) is None:
-                logger.warning("Invalid JSON filename pattern. Check file")
+                LOGGER.warning("Invalid JSON filename pattern. Check file")
             else:
-                logger.info(f"File {self.filename} passed validation check.")
+                LOGGER.info(f"File {self.filename} passed validation check.")
         except Exception as error:
-            logger.warning(f"File {self.filename} encountered: {error}.")
+            LOGGER.warning(f"File {self.filename} encountered: {error}.")
 
     def _read_source(self):
         with open(self.fullpath, "r") as f:
@@ -141,9 +137,8 @@ class JSONLoader(BaseLoader):
         try:
             obj = json.loads(raw)
         except json.JSONDecodeError as error:
-            logger.error(
-                f"Failed to parse JSON for {self.filename}: {error}."
-                f" Skipping file."
+            LOGGER.error(
+                f"Failed to parse JSON for {self.filename}: {error}." f" Skipping file."
             )
             return None
         return obj
@@ -160,7 +155,7 @@ class TextLoader(BaseLoader):
     def __init__(self, fullpath):
         super().__init__(fullpath)
         self.filename = os.path.basename(self.fullpath)
-        self.pattern = r"^CLICKSTREAMS_[a-zA-Z0-9_]+_\d{8}.txt"
+        self.pattern = r"^CLICKSTREAMS_[a-zA-Z0-9_]+_\d{4}-\d{2}-\d{2}.txt"
 
     def _validate_file(self):
         super()._validate_file()
@@ -169,11 +164,11 @@ class TextLoader(BaseLoader):
             if not self.filename.endswith(".txt"):
                 raise ValueError("Invalid file extension. Check file")
             elif re.match(self.pattern, self.filename, re.IGNORECASE) is None:
-                logger.warning("Invalid Text filename pattern. Check file")
+                LOGGER.warning("Invalid Text filename pattern. Check file")
             else:
-                logger.info(f"File {self.filename} passed validation check.")
+                LOGGER.info(f"File {self.filename} passed validation check.")
         except Exception as error:
-            logger.warning(f"File {self.filename} encountered: {error}.")
+            LOGGER.warning(f"File {self.filename} encountered: {error}.")
 
     def _read_source(self):
         return super()._read_source()
@@ -191,7 +186,7 @@ class TextLoader(BaseLoader):
                 for part in parts:
                     if ": " in part:
                         key, value = part.split(": ", 1)
-                        curr_log_entry[key.strip().lower()] = value.strip()
+                        curr_log_entry[key.strip()] = value.strip()
                     if len(parts) != self.required_columns:
                         raise ValueError(
                             f"Invalid text format in {self.filename}: {line}"
@@ -200,14 +195,13 @@ class TextLoader(BaseLoader):
                     parsed_log_data.append(curr_log_entry)
             return parsed_log_data
         except Exception as error:
-            logger.error(
-                f"Failed to parse text for {self.filename}: {error}."
-                f" Skipping file."
+            LOGGER.error(
+                f"Failed to parse text for {self.filename}: {error}." f" Skipping file."
             )
             return None
 
     def _postprocess_df(self, df):
         df = super()._postprocess_df(df)
         if "date" in df.columns:
-            df.loc[:, "date"] = pd.to_datetime(df["date"], format="%m/%d/%Y")
+            df.loc[:, "date"] = pd.to_datetime(df["date"], format="%Y-%m-%d")
         return df

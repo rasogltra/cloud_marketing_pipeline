@@ -3,10 +3,12 @@ import fnmatch
 import os
 import pandas as pd
 import logging
+import json
 from datetime import datetime
 from etl.etl import CSVLoader, JSONLoader, TextLoader
 from database.config import get_config, get_db_engine
 from database.database_writer import DatabaseWriter
+from pathlib import Path
 
 # Load config object
 config = get_config()
@@ -15,30 +17,33 @@ if not config:
     exit(1)
 
 # Access directories
-data_directory = config.get("Paths", "data_directory")
-log_directory = config.get("Paths", "log_directory")
-processed_directory = config.get("Paths", "processed_directory")
+DATA_DIRECTORY = config.get("Paths", "DATA_DIRECTORY")
+PROCESSED_DIRECTORY = config.get("Paths", "PROCESSED_DIRECTORY")
 
-os.makedirs(data_directory, exist_ok=True)
-os.makedirs(log_directory, exist_ok=True)
-os.makedirs(processed_directory, exist_ok=True)
+os.makedirs(DATA_DIRECTORY, exist_ok=True)
+os.makedirs(PROCESSED_DIRECTORY, exist_ok=True)
+os.makedirs("logs", exist_ok=True)
+os.makedirs("metadata", exist_ok=True)
+
+ROOT_PATH = Path(__file__)
 
 # Configure logging
-log_path = os.path.join(log_directory, "etl.log")
+LOG_PATH = os.path.join(ROOT_PATH / "logs", "etl.log")
+# LOG_PATH = os.path.join(LOG_DIRECTORY, "etl.log")
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
     handlers=[
-        logging.FileHandler(log_path, encoding="utf-8", mode="a"),
+        logging.FileHandler(LOG_PATH, encoding="utf-8", mode="a"),
         logging.StreamHandler(),
     ],
 )
 
 # ===============================================
 
-logger = logging.getLogger(__name__)
-logger.info("Application started.")
+LOGGER = logging.getLOGGER(__name__)
+LOGGER.info("Application started.")
 
 merged_df = pd.DataFrame()
 df_master = pd.DataFrame()
@@ -52,13 +57,13 @@ engine = None
 try:
     engine = get_db_engine()
     if not engine:
-        logger.error("Failed to create engine.")
+        LOGGER.error("Failed to create engine.")
         exit(1)
 
     writer = DatabaseWriter(engine)
 
-    for filename in os.listdir(data_directory):
-        fullpath = os.path.join(data_directory, filename)
+    for filename in os.listdir(DATA_DIRECTORY):
+        fullpath = os.path.join(DATA_DIRECTORY, filename)
         try:
             if fnmatch.fnmatch(filename, "*.csv"):
                 loader = CSVLoader(fullpath)
@@ -67,67 +72,66 @@ try:
             elif fnmatch.fnmatch(filename, "*.txt"):
                 loader = TextLoader(fullpath)
             else:
-                logger.warning(f"Unsupported file format: {filename}")
+                LOGGER.warning(f"Unsupported file format: {filename}")
                 continue
 
             df = loader.load()
             if df is not None and not df.empty:
                 if isinstance(loader, CSVLoader):
                     csv_frames.append(df)
-                    logger.info(f"Preparing to insert {len(df)} rows")
-                    writer.load_to_database(df, "ads_data")
+                    LOGGER.info(f"Preparing to insert {len(df)} rows")
+                    writer.load_to_database(df, "ADS_Data")
                 elif isinstance(loader, JSONLoader):
                     json_frames.append(df)
-                    logger.info(f"Preparing to insert {len(df)} rows")
-                    writer.load_to_database(df, "performance_data")
+                    LOGGER.info(f"Preparing to insert {len(df)} rows")
+                    writer.load_to_database(df, "Performance_Data")
                 elif isinstance(loader, TextLoader):
                     text_frames.append(df)
-                    logger.info(f"Preparing to insert {len(df)} rows")
-                    writer.load_to_database(df, "clickstreams_data")
+                    LOGGER.info(f"Preparing to insert {len(df)} rows")
+                    writer.load_to_database(df, "Clickstreams_Data")
             else:
-                logger.warning(f"No data returned for {filename}")
+                LOGGER.warning(f"No data returned for {filename}")
         except Exception as error:
-            logger.error(f"Failed to load {filename}:{error}")
+            LOGGER.error(f"Failed to load {filename}:{error}")
 except Exception as error:
-    logger.error(f"Error reading files into dataframe and database: {error}")
+    LOGGER.error(f"Error reading files into dataframe and database: {error}")
 
-# Merge all files together
-csv_df = (
-    pd.concat(csv_frames, ignore_index=True) if csv_frames else pd.DataFrame()
-)
-json_df = (
-    pd.concat(
-        json_frames, ignore_index=True) if json_frames else pd.DataFrame()
-)
-text_df = (
-    pd.concat(
-        text_frames, ignore_index=True) if text_frames else pd.DataFrame()
-)
+# Merge files together
+csv_df = pd.concat(csv_frames,
+                   ignore_index=True) if csv_frames else pd.DataFrame()
+json_df = pd.concat(json_frames,
+                    ignore_index=True) if json_frames else pd.DataFrame()
+text_df = pd.concat(text_frames,
+                    ignore_index=True) if text_frames else pd.DataFrame()
 
-# Join
 if not csv_df.empty and not json_df.empty:
-    merged_df = csv_df.merge(
-        json_df, on=["client", "date", "channel"], how="left")
+    merged_df = csv_df.merge(json_df, on=["Client",
+                                          "Date",
+                                          "Channel"],
+                             how="left")
 else:
-    merged_df = csv_df
+    raise ValueError("Error merging CSV and JSON dataframes.")
 
 if not merged_df.empty and not text_df.empty:
-    df_master = merged_df.merge(
-        text_df, on=["client", "date", "channel"], how="left"
-        )
+    df_master = merged_df.merge(text_df, on=["Client",
+                                             "Date",
+                                             "Channel"],
+                                how="left")
 else:
-    df_master = merged_df
-
-logger.info("File ingestion finished...")
-
-DatabaseWriter.report_table(engine)
+    raise ValueError("Error merging Text dataframe into the final dataframe.")
+LOGGER.info("File ingestion finished...")
 
 # Save the master report
-logger.info(f"Write CSV report to {processed_directory}")
-path = (
-    os.path.join(processed_directory, f"summary_report_{datetime.now()}.csv")
-)
-df_master = DatabaseWriter.build_metadata(
-    "merged_pipeline", data_directory, df_master
-)
+LOGGER.info(f"Write CSV report to {PROCESSED_DIRECTORY}")
+path = os.path.join(PROCESSED_DIRECTORY,
+                    f"summary_report_{datetime.now()}.csv")
 df_master.to_csv(path, index=False)
+
+# Save metadata report
+df_metadata = DatabaseWriter.build_metadata(
+    f"Metadata_{datetime.now()}", DATA_DIRECTORY, df_master
+)
+
+meta_f = f"Metadata_{datetime.now().strftime('%Y-%m-%d')}.json"
+with open(f"Metadata/{meta_f}", "w") as file:
+    json.dump(df_metadata, file, indent=4)

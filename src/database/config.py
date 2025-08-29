@@ -1,15 +1,16 @@
 from configparser import ConfigParser
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine # type: ignore
 import os
 import logging
+from pathlib import Path
 
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 _engine = None
-
 
 def get_config():
     env = os.getenv("APP_ENV", "local")  # default to local
-    root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    root = Path(__file__).resolve().parents[2]
+    # root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
     path = os.path.join(root, "config", f"config.{env}.ini")
     parser = ConfigParser()
     read_files = parser.read(path)
@@ -42,4 +43,4 @@ def get_db_engine():
         _engine = create_engine(connection_str)
         return _engine
     except Exception as error:
-        logger.error(f"Unable to establish connection to database: {error}")
+        LOGGER.error(f"Unable to establish connection to database: {error}")

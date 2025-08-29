@@ -1,21 +1,19 @@
-import pytest
+import pytest # type: ignore
 import json
 import logging
 from src.etl.etl import CSVLoader, JSONLoader, TextLoader
 import tempfile
 from pathlib import Path
 
-logger = logging.getLogger("test_logger")
-logger.setLevel(logging.WARNING)
+LOGGER = logging.getLogger("test_logger")
+LOGGER.setLevel(logging.WARNING)
 
 
 class TestCSVLoader:
 
     @pytest.fixture
     def temp_csv_file(self):
-        with tempfile.NamedTemporaryFile(
-            mode="w+", suffix=".csv", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w+", suffix=".csv", delete=False) as f:
             f.write(
                 "Client,Date,Channel,Campaign_id,Spend_usd\n"
                 "Dummy,2024-06-21,Google,camp_007,754.47"
@@ -34,9 +32,7 @@ class TestCSVLoader:
         bad_file.write_text("some data,to,test\n")
         loader = CSVLoader(str(bad_file))
 
-        with pytest.raises(
-            ValueError, match="Invalid file extension. Check file."
-        ):
+        with pytest.raises(ValueError, match="Invalid file extension. Check file."):
             loader._validate_file()
 
     def test_invalid_filename_pattern(self, tmp_path, caplog):
@@ -48,7 +44,7 @@ class TestCSVLoader:
 
         loader = CSVLoader(str(bad_file))
 
-        with caplog.at_level(logging.WARNING, logger="etl.etl"):
+        with caplog.at_level(logging.WARNING, LOGGER="etl.etl"):
             loader._validate_file()
 
         assert any(
@@ -65,13 +61,12 @@ class TestCSVLoader:
 
         loader = CSVLoader(str(bad_columns))
 
-        with caplog.at_level(logging.WARNING, logger="etl.etl"):
+        with caplog.at_level(logging.WARNING, LOGGER="etl.etl"):
             loader._validate_file()
 
         assert any(
             "CSV file AD_SPEND_DUMMY_20250819.csv "
-            "is missing required columns. Skipping file."
-            in msg
+            "is missing required columns. Skipping file." in msg
             for msg in caplog.messages
         )
         assert any(loader.filename in msg for msg in caplog.messages)
@@ -110,7 +105,7 @@ class TestJSONLoader:
 
         loader = JSONLoader(str(bad_file))
 
-        with caplog.at_level(logging.WARNING, logger="etl.etl"):
+        with caplog.at_level(logging.WARNING, LOGGER="etl.etl"):
             loader._validate_file()
 
         assert any(
@@ -124,7 +119,7 @@ class TestJSONLoader:
 
         loader = JSONLoader(str(bad_file))
 
-        with caplog.at_level(logging.ERROR, logger="etl.etl"):
+        with caplog.at_level(logging.ERROR, LOGGER="etl.etl"):
             raw_json = bad_file.read_text()
             result = loader._parse_records(raw_json)
 
@@ -136,12 +131,9 @@ class TestTextLoader:
 
     @pytest.fixture
     def temp_txt_file(self):
-        with tempfile.NamedTemporaryFile(
-            mode="w+", suffix=".txt", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w+", suffix=".txt", delete=False) as f:
             f.write(
-                "client: Dummy | date: 08/19/2025 |"
-                "channel: Dummy | event: dummy"
+                "client: Dummy | date: 08/19/2025 |" "channel: Dummy | event: dummy"
             )
             f_path = Path(f.name)
         yield str(f_path)
@@ -165,7 +157,7 @@ class TestTextLoader:
 
         loader = TextLoader(str(bad_file))
 
-        with caplog.at_level(logging.WARNING, logger="etl.etl"):
+        with caplog.at_level(logging.WARNING, LOGGER="etl.etl"):
             loader._validate_file()
 
         assert any(
@@ -179,7 +171,7 @@ class TestTextLoader:
 
         loader = TextLoader(str(bad_file))
 
-        with caplog.at_level(logging.ERROR, logger="etl.etl"):
+        with caplog.at_level(logging.ERROR, LOGGER="etl.etl"):
             raw_txt = bad_file.read_text()
             result = loader._parse_records(raw_txt)
 
