@@ -47,7 +47,7 @@ class TestCSVLoader:
 
         loader = CSVLoader(str(bad_file))
 
-        with caplog.at_level(logging.WARNING, LOGGER="etl.etl"):
+        with caplog.at_level(logging.WARNING, logger="etl.etl"):
             loader._validate_file()
 
         assert any(
@@ -64,7 +64,7 @@ class TestCSVLoader:
 
         loader = CSVLoader(str(bad_columns))
 
-        with caplog.at_level(logging.WARNING, LOGGER="etl.etl"):
+        with caplog.at_level(logging.WARNING, logger="etl.etl"):
             loader._validate_file()
 
         assert any(
@@ -108,7 +108,7 @@ class TestJSONLoader:
 
         loader = JSONLoader(str(bad_file))
 
-        with caplog.at_level(logging.WARNING, LOGGER="etl.etl"):
+        with caplog.at_level(logging.WARNING, logger="etl.etl"):
             loader._validate_file()
 
         assert any(
@@ -122,7 +122,7 @@ class TestJSONLoader:
 
         loader = JSONLoader(str(bad_file))
 
-        with caplog.at_level(logging.ERROR, LOGGER="etl.etl"):
+        with caplog.at_level(logging.ERROR, logger="etl.etl"):
             raw_json = bad_file.read_text()
             result = loader._parse_records(raw_json)
 
@@ -163,7 +163,7 @@ class TestTextLoader:
 
         loader = TextLoader(str(bad_file))
 
-        with caplog.at_level(logging.WARNING, LOGGER="etl.etl"):
+        with caplog.at_level(logging.WARNING, logger="etl.etl"):
             loader._validate_file()
 
         assert any(
@@ -177,7 +177,7 @@ class TestTextLoader:
 
         loader = TextLoader(str(bad_file))
 
-        with caplog.at_level(logging.ERROR, LOGGER="etl.etl"):
+        with caplog.at_level(logging.ERROR, logger="etl.etl"):
             raw_txt = bad_file.read_text()
             result = loader._parse_records(raw_txt)
 
