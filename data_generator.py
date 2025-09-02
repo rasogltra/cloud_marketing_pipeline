@@ -1,4 +1,4 @@
-from faker import Faker # type: ignore
+from faker import Faker  # type: ignore
 import datetime
 import csv
 import sys
@@ -14,6 +14,7 @@ prefix = "camp_0"
 campaign_ids = [
     prefix + str(faker.unique.random_int(min=100, max=500)) for _ in range(100)
 ]
+
 
 def generate_row():
     return {
@@ -46,6 +47,7 @@ def generate_row():
                 'add_to_cart'
             ))
     }
+
 
 if __name__ == "__main__":
     args = sys.argv[1:]
